@@ -1,0 +1,17 @@
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        if (nums == null || nums.length == 0){
+            return 0;
+        }
+        int left = 0;
+        for(int right = 1; right < nums.length; right++){
+            if(nums[left] != nums[right]){//如果左右指针指向的数不同，此时才left++
+                nums[++left] = nums[right];
+            }
+        }
+        return left+1;
+    }
+}
+
+//runtime:0 ms
+//memory:43.1 MB

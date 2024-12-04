@@ -1,0 +1,23 @@
+class Solution {
+    public int totalFruit(int[] tree) {
+        if (tree == null || tree.length == 0) return 0;
+        int n = tree.length;
+
+        Map<Integer, Integer> map = new HashMap<>();
+        int maxLen = 0, left = 0;
+        for (int i = 0; i < n; i++) {
+            map.put(tree[i], map.getOrDefault(tree[i], 0) + 1);  // 右边界
+            while (map.size() > 2) {  // 不符合条件：水果种类大于2
+                map.put(tree[left], map.get(tree[left]) - 1);
+                if (map.get(tree[left]) == 0) map.remove(tree[left]);
+                left++;  // 左边界
+            }
+            maxLen = Math.max(maxLen, i - left + 1); // 更新结果
+        }
+        return maxLen;
+    }
+}
+
+
+//runtime:47 ms
+//memory:50.8 MB

@@ -1,0 +1,40 @@
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        ListNode slow = head, fast = head;
+        boolean isLoop = false;
+        if(head == null){ 
+            return null;
+            };
+        while(fast.next != null && fast.next.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast){
+                isLoop = true;
+                break;
+            }
+        }
+        if(isLoop){
+            slow = head;
+            while(slow != fast){
+                slow = slow.next;
+                fast = fast.next;
+                }
+//return 语句一定要写在while外面，因为如果在出发点相遇，不会进while
+            return slow;
+        }
+        return null;
+    }
+}
+//runtime:0 ms
+//memory:41.3 MB

@@ -1,0 +1,41 @@
+### 解题思路
+
+两数之和题目，由于只需要计算两个数的和，因此主要有两个解题思路：
+1.采用暴力解法，直接使用双层循环解题。伪代码如下：
+
+* java
+
+```java
+for(int i = 0; i < nums.length; i++) {
+    for(int j = i + 1; j < nums.length; j++) {
+        if(nums[i] + nums[j] == target) {
+            return new int[]{i, j};
+        }
+    }
+}
+```
+
+2.利用哈希表的键值对映射关系，将数组中已经遍历过的值存放到哈希表中，同时每次遍历数组时判断是否存在一个数 + 当前数 = target，如果存在，则找到，直接返回即可；如果不存在，则添加到哈希表中，继续遍历。代码如下：
+
+* java
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        if(nums == null || nums.length == 0) {
+            return null;
+        }
+
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++) {
+            if(map.containsKey(target - nums[i])) {
+                return new int[]{i, map.get(target - nums[i])};
+            }
+            map.put(nums[i], i);
+        }
+        return new int[2];
+    }
+}
+```
+
+ps：后续的题目中还会有三数之和、四数之和，核心思路都是不断拆分，将三数之和、四叔之和通过二分法拆分为两数之和，之后套用上述代码进行解题。

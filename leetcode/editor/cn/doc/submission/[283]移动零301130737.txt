@@ -1,0 +1,32 @@
+class Solution {
+    public void moveZeroes(int[] nums) {
+        // int s = 0;//慢指针
+        // for(int i = 0; i < nums.length; i++){//遍历快指针
+        //     if(nums[i] != 0){
+        //         nums[s++] = nums[i]; 
+        //     }
+        // }
+
+        // for(int i = s; i < nums.length; i++){
+        //     nums[i] = 0;
+        // }
+        int slow = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if(nums[i] != 0){
+                swap(nums, slow++, i);
+            }
+        }
+
+
+
+
+    }
+
+        public void swap(int[] nums, int left, int right) {
+        int temp = nums[left];
+        nums[left] = nums[right];
+        nums[right] = temp;
+    }
+}
+//runtime:2 ms
+//memory:42.7 MB

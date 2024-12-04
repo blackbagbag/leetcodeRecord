@@ -1,0 +1,67 @@
+- 利用cnt统计整个窗口字母不同的个数，若cnt中全部都为0，代表窗口中字母于p字符串的字母相同
+- 时间复杂度为O(m + (n - m) * C)
+
+* java
+
+```java
+class Solution {
+    public List<Integer> findAnagrams(String _s, String _p) {
+        List<Integer> ans = new ArrayList<>();
+        if (_s.length() < _p.length()) return ans;
+        int[] cnt = new int[26];
+        int k = _p.length();
+        char[] s = _s.toCharArray(), p = _p.toCharArray();
+        for (int i = 0; i < k; i++) {
+            cnt[p[i] - 'a']++;
+            cnt[s[i] - 'a']--;
+        }
+        if (check(cnt)) ans.add(0);
+        for (int i = k; i < s.length; i++) {
+            cnt[s[i - k] - 'a']++;
+            cnt[s[i] - 'a']--;
+            if (check(cnt)) ans.add(i - k + 1);
+        }
+        return ans;
+    }
+    boolean check(int[] cnt) {
+        for (int i = 0; i < 26; i++) if (cnt[i] != 0) return false;
+        return true;
+    }
+}
+```
+
+- 优化：我们利用变量rec来统计有多少类字母的个数不相同，那么当窗口移动时，会增加一个字母，删除一个字母。当增加一个字母，若cnt个数变为0,那么代表这类字母的数量正确，rec--;若增加后，cnt=-1,那么代表第一次出现该类字母数量不匹配，rec++;
+- 删除同理，若删除后cnt=0,该类字母匹配成功，rec--;否则，cnt=1,代表删除字母后，出现了新的不匹配字母，rec++。
+- 时间复杂度为O(n + C)
+
+* java
+
+```java
+class Solution {
+    public List<Integer> findAnagrams(String _s, String _p) {
+        List<Integer> ans = new ArrayList<>();
+        if (_s.length() < _p.length()) return ans;
+        int[] cnt = new int[26];
+        int k = _p.length();
+        char[] s = _s.toCharArray(), p = _p.toCharArray();
+        for (int i = 0; i < k; i++) {
+            cnt[p[i] - 'a']++;
+            cnt[s[i] - 'a']--;
+        }
+        int rec = 0; //用于记录有多少字母数量不对
+        for (int i = 0; i < 26; i++) if (cnt[i] != 0) rec++;    
+        if (rec == 0) ans.add(0); 
+        for (int i = k; i < s.length; i++) {
+            if (--cnt[s[i] - 'a'] == 0) rec--; //代表有一类字母正常
+            if (cnt[s[i] - 'a'] == -1) rec++; // 若第一次等于-1，新增一类字母个数不匹配
+            if (++cnt[s[i - k] - 'a'] == 1) rec++;
+            if (cnt[s[i- k] - 'a'] == 0) rec--;
+            if (rec == 0) ans.add(i - k + 1);
+        }
+        return ans;
+    }
+     
+}
+
+```
+

@@ -1,0 +1,17 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] result = new int[2];
+        Map<Integer, Integer> storeNums = new HashMap<>(nums.length, 1);
+            for(int i = 0; i < nums.length; i++) {
+                if(!storeNums.containsKey(target - nums[i])){
+                    storeNums.put(nums[i], i);
+                }else {
+                    result[0] = storeNums.get(target - nums[i]);
+                    result[1] = i;
+                }
+            }
+        return result;
+    }
+}
+//runtime:4 ms
+//memory:42.7 MB

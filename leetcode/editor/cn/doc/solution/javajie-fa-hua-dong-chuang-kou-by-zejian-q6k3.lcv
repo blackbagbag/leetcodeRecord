@@ -1,0 +1,74 @@
+> Problem: [76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/description/)
+
+[TOC]
+
+# 思路
+
+> 滑动窗口解决
+
+# 解题方法
+
+> 通过两个变量, 一个用来固定左边界一个用来固定右边界, 滑动窗口并判断符合条件时的最小子串长度
+
+# 复杂度
+
+- 时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+- 空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    // 通过滑动窗口来解决
+    Map<Character, Integer> osi = new HashMap<>(); // 存储字符串t中每个字符和每个字符出现的次数
+    Map<Character, Integer> cnt = new HashMap<>(); // 动态存储截取的字符串中每个字符包含的个数
+
+    public String minWindow(String s, String t) {
+        int tLen = t.length();
+        for (int i = 0; i < tLen; i++) {
+            char a = t.charAt(i);
+            osi.put(a, osi.getOrDefault(a, 0) + 1);
+        }
+        int sLen = s.length();
+        int l = 0, r = -1;
+        int ansL = -1, ansR = -1, len = Integer.MAX_VALUE;
+        while (r < sLen) {
+            ++r;
+            if (r < sLen && osi.containsKey(s.charAt(r))) {
+                cnt.put(s.charAt(r), cnt.getOrDefault(s.charAt(r), 0) + 1);
+            }
+            while (check() && l <= r) {
+                if (r - l + 1 < len) {
+                    len = r - l + 1;
+                    ansL = l;
+                    ansR = l + len;
+                }
+                // 判断当前开头字符是否是t中所含字符
+                if (osi.containsKey(s.charAt(l))) {  // 开始滑动窗口
+                    cnt.put(s.charAt(l), cnt.getOrDefault(s.charAt(l), 0) - 1);
+                }
+                ++l;
+            }
+        }
+        return ansL == -1 ? "" : s.substring(ansL, ansR);
+    }
+
+    public boolean check() {
+        for (Map.Entry<Character, Integer> entry : osi.entrySet()) {
+            Character key = entry.getKey();
+            Integer value = entry.getValue();
+            if (cnt.getOrDefault(key, 0) < value) return false;
+        }
+        return true;
+    }
+}
+```
+

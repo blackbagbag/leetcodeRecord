@@ -1,0 +1,36 @@
+经典使用int[26]解法
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        int[] num = new int[26];
+        int length1 = s.length();
+        int length2 = t.length();
+        for(int i=0;i<length1;i++)
+        {
+            if(s!=null)
+            {
+                num[s.charAt(i)-'a']++;
+            }
+        }
+        for(int j=0;j<length2;j++)
+        {
+            num[t.charAt(j)-'a']--;
+        }
+        for(int k=0;k<num.length;k++)
+        {
+            if(num[k]!=0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+

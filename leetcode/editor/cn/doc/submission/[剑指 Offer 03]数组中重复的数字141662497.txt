@@ -1,0 +1,15 @@
+class Solution {
+    public int findRepeatNumber(int[] nums) {
+        Set<Integer> set = new HashSet<Integer>();
+        int repeat = -1;
+        for(int num: nums){
+            if(!set.add(num)){
+                repeat = num;
+                break;
+            }
+        }
+        return repeat;
+    }
+}
+//runtime:5 ms
+//memory:48.4 MB

@@ -1,0 +1,39 @@
+### 解题思路
+
+此题为滑动窗口系列中的计数问题，freq数组记录现在窗口中两种水果的数目，count记录现在窗口中有多少种不同的水果，如果count<=2，那么right指针可以一直向右移动，直到count>2,当count>2时，说明窗口中的水果种类超过2，为了减少水果种类，left指针就要向右移动，移动的同时还要更新freq数组，最后取最大值即可。
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int totalFruit(int[] fruits) {
+        int n = fruits.length;
+        if(n <= 2) return n;
+        int ans = 2,left = 0,right = 0;
+        int[] freq = new int[n];
+        int count = 0;
+        while(right < n){
+            freq[fruits[right]]++;
+            if(freq[fruits[right]] == 1) count++;
+            right++;
+            while(count > 2){
+                freq[fruits[left]]--;
+                if(freq[fruits[left]] == 0) count--;
+                left++;
+            }
+            ans = Math.max(ans,right-left);
+        }
+        return ans;
+    }
+}
+```
+
+练习题：
+[至多包含两个不同字符的最长子串](https://leetcode-cn.com/problems/longest-substring-with-at-most-two-distinct-characters/)（会员题）
+[替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/)
+[最大连续1的个数 II](https://leetcode-cn.com/problems/max-consecutive-ones-ii/)（会员题）
+[最大连续1的个数 III](https://leetcode-cn.com/problems/max-consecutive-ones-iii/)
+
+如果有帮助到你，请给题解点个赞和收藏，让更多的人看到 ~ ("▔□▔)/

@@ -18,11 +18,9 @@
 | 22.11.14 |          160, 142 |   链表相交, 环形链表   |
 | 22.11.17 | 242, 383, 49, 438 |      哈希表       |
 | 22.11.17 |  349, 350, 202, 1 |      哈希表       |
-
-| 23.1.30 |   |      哈希表       |
-
-
-
+|  23.1.30 |  454 |      哈希表       |
+|  23.6.12 |  15， 18 |      哈希表       |
+| 23.11.25 |   |      哈希表       |
 
 
 ### 26 删除有序数组中的重复（二分法双指针）
@@ -1320,6 +1318,239 @@ class Solution {
             }
         }
         return ans;
+    }
+}
+```
+### 15. 三数之和
+```java
+public class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        // 结果列表
+        List<List<Integer>> res = new ArrayList<>();
+
+        // 对数组进行排序
+        Arrays.sort(nums);
+
+        // 遍历数组
+        for (int i = 0; i < nums.length && nums[i] <= 0; ++i) {
+            // 避免重复解
+            if (i == 0 || nums[i - 1] != nums[i]) {
+                // 使用双指针寻找两数之和为-nums[i]的元素对
+                twoSumII(nums, i, res);
+            }
+        }
+        return res;
+    }
+
+    private void twoSumII(int[] nums, int i, List<List<Integer>> res) {
+        // 设置左右指针
+        int lo = i + 1, hi = nums.length - 1;
+
+        while (lo < hi) {
+            int sum = nums[i] + nums[lo] + nums[hi];
+            // 如果和小于0，增大lo指针
+            if (sum < 0) {
+                ++lo;
+                // 如果和大于0，减小hi指针
+            } else if (sum > 0) {
+                --hi;
+                // 如果和等于0，将结果添加到res并移动lo和hi直至指向的元素改变
+            } else {
+                res.add(Arrays.asList(nums[i], nums[lo++], nums[hi--]));
+                while (lo < hi && nums[lo] == nums[lo - 1])
+                    ++lo;
+            }
+        }
+    }
+}
+```
+### 18. 四数之和
+```java
+//k-sum 时间复杂度为N的（k-1）次方
+public class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        // 初始化结果列表
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+
+        // 检查输入数组是否为空或长度小于4，如果是，则返回空结果列表
+        if(nums == null || nums.length < 4)
+            return result;
+
+        // 对输入数组进行排序
+        Arrays.sort(nums);
+
+        // 外层循环遍历数组中的每个元素，除了最后的三个元素
+        for(int i = 0; i < nums.length - 3; i++) {
+            // 如果当前元素与前一个元素相同，则跳过当前迭代
+            if(i != 0 && nums[i] == nums[i - 1])
+                continue;
+
+            // 内层循环从外层循环的下一个元素开始，遍历到倒数第二个元素
+            for(int j = i + 1; j < nums.length - 2; j++) {
+                // 如果当前元素与前一个元素相同（且不是外层循环的第一个元素），则跳过当前迭代
+                if(j != i + 1 && nums[j] == nums[j - 1])
+                    continue;
+
+                // 初始化两个指针k和l，k指向内层循环的下一个元素，l指向数组的最后一个元素
+                int k = j + 1;
+                int l = nums.length - 1;
+
+                // 在k < l的条件下，执行以下操作
+                while(k < l) {
+                    // 如果四个元素的和小于目标值，则增加k
+                    if(nums[i] + nums[j] + nums[k] + nums[l] < target) {
+                        k++;
+                        // 如果四个元素的和大于目标值，则减少l
+                    } else if(nums[i] + nums[j] + nums[k] + nums[l] > target) {
+                        l--;
+                        // 如果四个元素的和等于目标值
+                    } else {
+                        // 添加这四个元素到结果列表
+                        List<Integer> t = new ArrayList<Integer>();
+                        t.add(nums[i]);
+                        t.add(nums[j]);
+                        t.add(nums[k]);
+                        t.add(nums[l]);
+                        result.add(t);
+
+                        // 同时增加k和减少l
+                        k++;
+                        l--;
+
+                        // 跳过所有与当前k位置元素相同的元素
+                        while(k < l && nums[k] == nums[k - 1]) {
+                            k++;
+                        }
+
+                        // 跳过所有与当前l位置元素相同的元素
+                        while(k < l && nums[l] == nums[l + 1]) {
+                            l--;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 最后，返回结果列表
+        return result;
+    }
+}
+```
+```java
+public class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        // 初始化结果列表，用于存放所有满足条件的四元组
+        List<List<Integer>> quadruplets = new ArrayList<>();
+        
+        // 判断数组是否为空或长度小于4，如果是，则直接返回空的结果列表
+        if (nums == null || nums.length < 4) {
+            return quadruplets;
+        }
+        
+        // 对数组进行排序，方便后续操作
+        Arrays.sort(nums);
+        
+        // 获取数组长度
+        int length = nums.length;
+        
+        // 外层循环：遍历数组中的每个元素，除了最后的三个元素
+        for (int i = 0; i < length - 3; ++i) {
+            
+            // 如果当前元素与前一个元素相同，跳过当前迭代以避免重复
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            
+            // 剪枝：如果当前元素与接下来的三个元素的和大于目标值，由于数组已排序，后面的元素只会更大，因此无需进一步搜索，直接结束循环
+            if ((long)nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) {
+                break;
+            }
+            
+            // 剪枝：如果当前元素与数组最后三个元素的和仍小于目标值，由于数组已排序，当前元素无法与后面的元素组成满足条件的四元组，因此跳过当前迭代
+            if ((long)nums[i] + nums[length - 3] + nums[length - 2] + nums[length - 1] < target) {
+                continue;
+            }
+            
+            // 内层循环：从外层循环的下一个元素开始，遍历到倒数第二个元素
+            for (int j = i + 1; j < length - 2; ++j) {
+                
+                // 如果当前元素与前一个元素相同，跳过当前迭代以避免重复
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                
+                // 剪枝：如果当前元素与接下来的两个元素以及外层循环的元素的和大于目标值，由于数组已排序，后面的元素只会更大，因此无需进一步搜索，直接结束循环
+                if ((long)nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target) {
+                    break;
+                }
+                
+                // 剪枝：如果当前元素、外层循环的元素以及数组最后两个元素的和仍小于目标值，由于数组已排序，当前元素无法与后面的元素组成满足条件的四元组，因此跳过当前迭```java
+                // 迭代
+                if ((long)nums[i] + nums[j] + nums[length - 2] + nums[length - 1] < target) {
+                    continue;
+                }
+
+                // 初始化两个指针，left 指向内层循环的下一个元素，right 指向数组的最后一个元素
+                int left = j + 1, right = length - 1;
+
+                // 在 left < right 的条件下，执行以下操作
+                while (left < right) {
+                    // 计算四个元素的和
+                    long sum = (long)nums[i] + nums[j] + nums[left] + nums[right];
+
+                    // 如果四个元素的和等于目标值
+                    if (sum == target) {
+                        // 添加这四个元素到结果列表
+                        quadruplets.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+
+                        // 跳过所有与当前 left 位置元素相同的元素
+                        while (left < right && nums[left] == nums[left + 1]) {
+                            ++left;
+                        }
+
+                        // 跳过所有与当前 right 位置元素相同的元素
+                        while (left < right && nums[right] == nums[right - 1]) {
+                            --right;
+                        }
+
+                        // 同时增加 left 和减少 right
+                        ++left;
+                        --right;
+                    } else if (sum < target) {
+                        // 如果四个元素的和小于目标值，则增加 left
+                        ++left;
+                    } else {
+                        // 如果四个元素的和大于目标值，则减少 right
+                        --right;
+                    }
+                }
+            }
+        }
+
+        // 返回结果列表
+        return quadruplets;
+    }
+}
+```
+### 344. 反转字符串
+```java
+public class Solution {
+    public void reverseString(char[] s) {
+        // 初始化两个指针，left指向字符串的开始，right指向字符串的结束
+        int left = 0, right = s.length - 1;
+        
+        // 当left小于right时，进行反转操作
+        while (left < right) {
+            // 保存left指向的字符
+            char tmp = s[left];
+            // 将right指向的字符赋值给left指向的位置
+            s[left] = s[right];
+            // 将原left指向的字符赋值给right指向的位置，完成一次反转
+            s[right] = tmp;
+            // 更新指针，left向右移动，right向左移动
+            left++;
+            right--;
+        }
     }
 }
 ```

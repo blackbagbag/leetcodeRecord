@@ -1,0 +1,79 @@
+## 解题思路
+
+1. 建立一个`MyCircularQueue`类，中间的成员属性，包括`front`和`rear`，等同于双指针，我们用双指针的方法来标记头和尾的两个数字。
+2. 初始化一个 circularqueue = [0] * (k + 1) 的 list。
+   **重点**： 关于 k+1 而不是 k 是调整在边界条件的时候，发现 rear 其实永远在站在一个空的格子上。k+1长度，只能有k的存储长度。
+3. 开始编写每个成员方法
+
+### 方法的一点解释
+
+- `enQueue` 和 `deQueue`需要判断是否为满或者为空。 `% len(self.circularqueue)` 取余数； `self.front = self.front + 1` 只需要将front往前走一格，期间的内容就永远访问不到了，等于删除，等待覆写。
+- `Front` 和 `Rear`，直接读取元素。 **注意**: 不满足情况的时候，题目需要返回的是`-1`
+- `isEmpty` 和 `isFull` 判断front和rear的指针的位置。 如果rear + 1（考虑循环，取余数）就是front，类似两个人紧紧跟着，意味着就是满了。如果两个人重叠，证明完全没有东西，为空。
+
+### 代码
+
+* python
+
+```python
+class MyCircularQueue:
+
+    def __init__(self, k: int):
+        self.front = 0
+        self.rear = 0
+        self.circularqueue = [0] * (k + 1)
+
+    def enQueue(self, value: int) -> bool:
+        if self.isFull():
+            return False
+        else:
+            self.circularqueue[(self.rear) % len(self.circularqueue)] = value
+            self.rear += 1
+            return True
+
+    def deQueue(self) -> bool:
+        if self.isEmpty():
+            return False
+        else:
+            self.front = self.front + 1
+            return True
+
+    def Front(self) -> int:
+        if self.isEmpty():
+            return -1
+        else:
+            return self.circularqueue[self.front % len(self.circularqueue)]
+
+
+    def Rear(self) -> int:
+        if self.isEmpty():
+            return -1
+        else:
+            return self.circularqueue[(self.rear - 1) % len(self.circularqueue)]
+
+    def isEmpty(self) -> bool:
+        if self.front == self.rear:
+            return True
+        else:
+            return False
+
+    def isFull(self) -> bool:
+        if self.front == (self.rear + 1) % len(self.circularqueue):
+            return True
+        else:
+            return False
+
+
+
+
+
+# Your MyCircularQueue object will be instantiated and called as such:
+# obj = MyCircularQueue(k)
+# param_1 = obj.enQueue(value)
+# param_2 = obj.deQueue()
+# param_3 = obj.Front()
+# param_4 = obj.Rear()
+# param_5 = obj.isEmpty()
+# param_6 = obj.isFull()
+```
+

@@ -1,0 +1,51 @@
+### 解题思路
+
+双指针，一个指针i指向字符串中的位置，一个指针cur指向编辑器的位置，当字符串不是退格符时，双指针同步向前移动，**当字符串是退格符时，i继续向前，cur向后退，此时用i覆盖cur的位置，相当于在已退格的地方再次输入**。最后cur的位置是编辑器输入位置的后一位，对比两个数组从0到cur-1是否相同即可。
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public boolean backspaceCompare(String s, String t) {
+        char[] S=s.toCharArray();
+        char[] T=t.toCharArray();
+        int curS=0;
+        int curT=0;
+        for(int i=0;i<S.length;i++){
+            S[curS]=S[i];
+            if(S[i]!='#'){
+                curS++;
+            }else{
+                if(curS!=0){
+                    curS--;
+                }
+                
+            }
+        }
+        for(int i=0;i<T.length;i++){
+            T[curT]=T[i];
+            if(T[i]!='#'){
+                curT++;
+            }else{
+                if(curT!=0){
+                    curT--;
+                }
+                
+            }
+        }
+        if(curS!=curT){return false;}    //最后得到的数组大小不相同则肯定不符合
+        if(curS==curT&&curS==0){return true;}   //两个字符串都删除完
+        for(int i=0;i<curS;i++){
+            if(S[i]!=T[i]){
+                return false;
+            }
+        }
+        return true;
+        
+
+    }
+}
+```
+

@@ -1,0 +1,43 @@
+### 解题思路
+
+找到一个元素、两个元素为中心点，判断中心点元素是否回文，若是，则两端向外各自拓展一格继续判断，若仍是且当前长度大于历史最大值，更新最大长度并将其设为答案字串，继续重复此过程直到两端超出边界。
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public static String Contains(String t,int i,int j)
+	{
+		int max = 0;
+		String solution = t.substring(i,i+1);
+		while(i>=0&&j<t.length()&&t.charAt(i)==t.charAt(j))
+		{
+			if((j-i+1)>max)
+			{
+				max = j-i+1;
+				solution = t.substring(i,j+1);	//更新此次中心点探测出的答案数组
+			}
+			i--;
+		    j++;
+		}
+		return solution;
+	}
+    public String longestPalindrome(String s) {
+
+        int len = s.length();
+		String solution = s.substring(0,1);
+		for(int i=0;i<len-1;i++)
+		{
+			String t1 = Contains(s,i,i);	//一个中心点
+			String t2 = Contains(s,i,i+1);	//两个中心点
+			String tt = (t1.length()>t2.length())?t1:t2;	//本次两次中心点探测最终得到的结果
+			solution = (solution.length()>tt.length())?solution:tt;	//判断最后的答案数组是否需要更新
+		}
+    return solution;
+
+    }
+}
+```
+

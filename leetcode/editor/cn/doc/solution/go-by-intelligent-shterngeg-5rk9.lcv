@@ -1,0 +1,56 @@
+### 解题思路
+
+这个题目的难点在于解析字符串，如果你上过编译原理课，那么这个过程就会变得非常简单。
+
+关键算法: $result = result*10 + int(s[i]-'0')$
+
+### 代码
+
+* golang
+
+```golang
+func myAtoi(s string) int {
+	result, sign, i, n := 0, 1, 0, len(s)
+	const MinInt32, MaxInt32 = -1 << 31, 1<<31 - 1
+
+	for ; i < n && s[i] == ' '; i++ {
+	}
+	if i >= n {
+		return 0
+	}
+
+	switch s[i] {
+	case '+':
+		i++
+	case '-':
+		i++
+		sign = -1
+	}
+
+	for ; i < n; i++ {
+		if s[i] < 48 || s[i] > 57 {
+			break
+		}
+
+		result = result*10 + int(s[i]-'0')
+		if sign*result < MinInt32 {
+			return MinInt32
+		}
+		if sign*result > MaxInt32 {
+			return MaxInt32
+		}
+	}
+
+	return sign * result
+}
+```
+
+# 结果
+
+![image.png](https://pic.leetcode-cn.com/1658309935-bELRsW-image.png)
+
+# 分析
+
+优化1：尽量不要使用 slice 操作，例如 s = s[1:]，转而使用下标计算。
+优化2：想要最求速度，尽量不要使用 TrimeLeft() 这种函数，因为可能存在大字符串拷贝。
+优化3：缓存重复的操作：len(s), min, max。

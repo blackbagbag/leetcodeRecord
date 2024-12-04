@@ -1,0 +1,29 @@
+### 解题思路
+
+简单暴力破解
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+       // 定义返回值
+       int[] arr = new int[2];
+
+       // 当前数与后面的数进行相加
+       for(int i = 0; i < nums.length; i++){
+           for(int j = i + 1; j < nums.length; j++){
+               // 判断两数之和是否和target相等
+               if(nums[i] + nums[j] == target){
+                   arr[0] = i;
+                   arr[1] = j;
+               }
+           }
+       }
+       return arr;
+    }
+}
+```
+
